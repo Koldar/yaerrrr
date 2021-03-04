@@ -3,14 +3,15 @@ import os
 import semantic_version
 from semantic_version import Version
 
-require_pmakeup_version("1.6.0")
+require_pmakeup_version("1.22.0")
 
 global TWINE_TEST_PYPI_USER
 global TWINE_TEST_PYPI_PASSWORD
 global ADMIN_PASSWORD
 
-TWINE_TEST_PYPI_USER = "Koldar"
+global PACKAGE = "yaerrrr"
 
+TWINE_TEST_PYPI_USER = "Koldar"
 TWINE_PYPI_USER = "Koldar"
 
 ADMIN_PASSWORD = read_file_content("PASSWORD")
@@ -24,7 +25,7 @@ def clean():
 
 
 def _read_version() -> Version:
-    version_filepath = os.path.join("pmakeup", "version.py")
+    version_filepath = os.path.join(PACKAGE, "version.py")
     with open(version_filepath, "r") as f:
         version = f.read().split("=")[1].strip("\" \t\n")
     return Version(version)
@@ -33,7 +34,7 @@ def _read_version() -> Version:
 def update_version_major():
     version = _read_version()
     new_version = version.next_major()
-    version_filepath = os.path.join("pmakeup", "version.py")
+    version_filepath = os.path.join(PACKAGE, "version.py")
 
     echo(f"Updating version from {version} to {new_version} in {cwd()}...", foreground="blue")
     write_file(version_filepath, f"VERSION = \"{new_version}\"", overwrite=True)
@@ -42,7 +43,7 @@ def update_version_major():
 def update_version_minor():
     version = _read_version()
     new_version = version.next_minor()
-    version_filepath = os.path.join("pmakeup", "version.py")
+    version_filepath = os.path.join(PACKAGE, "version.py")
 
     echo(f"Updating version from {version} to {new_version} in {cwd()}...", foreground="blue")
     write_file(version_filepath, f"VERSION = \"{new_version}\"", overwrite=True)
@@ -51,18 +52,10 @@ def update_version_minor():
 def update_version_patch():
     version = _read_version()
     new_version = version.next_patch()
-    version_filepath = os.path.join("pmakeup", "version.py")
+    version_filepath = os.path.join(PACKAGE, "version.py")
 
     echo(f"Updating version from {version} to {new_version} in {cwd()}...", foreground="blue")
     write_file(version_filepath, f"VERSION = \"{new_version}\"", overwrite=True)
-
-
-def uninstall():
-    echo("Uninstall...", foreground="blue")
-    execute_admin_with_password_stdout_on_screen(
-        password=ADMIN_PASSWORD,
-        commands="pip3 uninstall --yes pmake",
-    )
 
 
 def build():
@@ -138,7 +131,7 @@ def upload_to_test_pypi():
             #"venv/Scripts/deactivate.bat"
         ])
     else:
-        raise PMakeupException()
+        raise ValueError(f"invalid operating system")
 
 
 def upload_to_pypi():
@@ -159,11 +152,11 @@ def upload_to_pypi():
             f"twine upload --verbose --non-interactive --username \"{TWINE_PYPI_USER}\" --password \"{TWINE_PYPI_PASSWORD}\" {upload_files}",
         ])
     else:
-        raise PMakeupException()
+        raise ValueError(f"Invalid operating system")
 
 
 declare_file_descriptor(f"""
-    This file allows to build, locally install and potentially upload a new version of pmake.
+    This file allows to build, locally install and potentially upload a new version of yaerrrr.
 """)
 declare_target(
     target_name="clean",
@@ -172,26 +165,20 @@ declare_target(
     requires=[],
 )
 declare_target(
-    target_name="uninstall",
-    description="Uninstall local version of pmake in the global pip sites",
-    f=uninstall,
-    requires=[],
-)
-declare_target(
     target_name="update-version-patch",
-    description="Uninstall local version of pmake in the global pip sites",
+    description="Uninstall local version of yaerrrr in the global pip sites",
     f=update_version_patch,
     requires=[],
 )
 declare_target(
     target_name="update-version-minor",
-    description="Uninstall local version of pmake in the global pip sites",
+    description="Uninstall local version of yaerrrr in the global pip sites",
     f=update_version_minor,
     requires=[],
 )
 declare_target(
     target_name="update-version-major",
-    description="Uninstall local version of pmake in the global pip sites",
+    description="Uninstall local version of yaerrrr in the global pip sites",
     f=update_version_major,
     requires=[],
 )
@@ -215,13 +202,13 @@ declare_target(
 )
 declare_target(
     target_name="upload-to-test-pypi",
-    description="Upload the latest version of pmake to pypi test",
+    description="Upload the latest version of yaerrrr to pypi test",
     f=upload_to_test_pypi,
     requires=["build"],
 )
 declare_target(
     target_name="upload-to-pypi",
-    description="Upload the latest version of pmake to pypi",
+    description="Upload the latest version of yaerrrr to pypi",
     f=upload_to_pypi,
     requires=["build"],
 )
