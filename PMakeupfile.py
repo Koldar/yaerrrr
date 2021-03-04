@@ -8,9 +8,9 @@ require_pmakeup_version("1.22.0")
 global TWINE_TEST_PYPI_USER
 global TWINE_TEST_PYPI_PASSWORD
 global ADMIN_PASSWORD
+global PACKAGE
 
-global PACKAGE = "yaerrrr"
-
+PACKAGE = "yaerrrr"
 TWINE_TEST_PYPI_USER = "Koldar"
 TWINE_PYPI_USER = "Koldar"
 
