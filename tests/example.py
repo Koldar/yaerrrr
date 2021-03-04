@@ -1,9 +1,9 @@
-from yaerrrr.AbstarctYaerrrrScript import AbstractYaerrrrScript
+import yaerrrr
 
 
-class TestEr(AbstractYaerrrrScript):
+class TestEr(yaerrrr.AbstractYaerrrrScript):
 
-    def generate_er(self, context: 'models.YaerrrContext') -> "models.ErDiagram":
+    def generate_er(self, context: 'yaerrrr.YaerrrContext') -> "yaerrrr.ErDiagram":
         er = context.er
 
         er.add_entity(name="authors", fields=[
