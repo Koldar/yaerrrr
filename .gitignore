@@ -5,3 +5,6 @@
 venv/
 build/
 *PASSWORD*
+pmakeup-cache.json
+dist/
+*.egg-info/
